@@ -1,93 +1,93 @@
 package com.app.statement;
 
-import java.util.ArrayList;
 import java.util.StringTokenizer;
+
 
 public class StatementParser {
 	
-	private String statement;
-	private String cols=" ";
-	private  ArrayList <String> array = new ArrayList<>();
-	
+	 private String statement;
+	 private StringTokenizer divState;
+	 private String attr[];
+	 
+	 
+	 
+	 
 	public StatementParser() {}
 	
 	public StatementParser(String statement) {
-		setStatement(statement);
-		escape(); 
-		Molding();
-		perser_get_attributename(statement);
 		
+		setStatement(statement);
+		Molding();
+		
+
 	}
 	
 	public String getStatement() { return this.statement;}
 	
 	private void setStatement(String statement) { this.statement = statement;}
 	
-	
-	public void escape() {
-
-		for(int i =0; i < this.statement.length();i++) {
-			 if(this.statement.charAt(i) == '#') this.statement = statement.replace(",", "#");
-            if(this.statement.charAt(i)=='!') this.statement = statement.replace(" ", "!");
-		 }
-		
-		
-	}
-	
-	public void Molding() {
+	//ブラウザから受け取ったクエリをアンエスケープする
+	private void Molding() {
 		 
 		for(int i =0; i < this.statement.length();i++) {
 			 if(this.statement.charAt(i) == '#') this.statement = statement.replace("#", " ,");
-             if(this.statement.charAt(i)=='!') this.statement = statement.replace("!", " ");
+            if(this.statement.charAt(i)=='!') this.statement = statement.replace("!", " ");
 		 }
-		
 	}
 	
+	public String []getAttrName() {
+		
+		return attr;
+	}
+	public String []divisionQuery(StatementParser sp) {
+		 this.divState = new StringTokenizer(sp.getStatement()," ,");
+		 String str = new String(this.divState.nextToken());
+		 
+		 
+		 int i =0;
+		 this.attr = new String[sp.getTokenlength().countTokens()];
+		 while(sp.getTokenlength().hasMoreTokens()) {
+			 attr[i]=sp.getTokenlength().nextToken();
+			 i++;
+		 }
+		 
+		 
+		 return getAttrName() ;
+	}
 	
+
 	
-	public void perser_get_attributename(String stdIn) {
+	public String []ForHandOverGetColumnName() {
 		
-		 this.setStatement(stdIn);
-		
-		int stateEntoryTable =  this.getStatement().indexOf("from");
-		int stateEntoryTableUpper =  this.getStatement().indexOf("FROM");
-		
-	
-		
-		
-		StringTokenizer  s = new StringTokenizer(this.getStatement()," ");
-		
-		
-		
-		for(int j = this.getStatement().indexOf("select"); j < stateEntoryTable ;j++) {
-			
-			if(this.getStatement().charAt(j)==',')   continue;
+		 for (String col : attr) {
+				if(col.equals("from")) break;
 				
-//			this.cols += String.valueOf(this.getStatement().charAt(j));
-		}
-//		
-		
-		
-		
-		System.out.println(this.getStatement().indexOf("select"));
-		
-		
-		while(s.hasMoreTokens()) array.add(s.nextToken());
-		
-
-		array.forEach(System.out::print);
-
-			
+				        System.out.println(col);
+		   }
+		 
+		 return attr;
 	}
 	
-
-	
-	
-	
+	public void extractionAttribute(StatementParser sp,Object []obj) {
 		
+		obj = new String[sp.getTokenlength().countTokens()];
+		 int i =0;
+		 
+		 while(sp.getTokenlength().hasMoreTokens()) {
+			 obj[i]=sp.getTokenlength().nextToken();
+			 i++;
+		 }
+		 
+		 
+	}
 	
 	
-	
+	public StringTokenizer getTokenlength() {
+		
+		return   this.divState;
+	}
+		
 	
 
 }
+
